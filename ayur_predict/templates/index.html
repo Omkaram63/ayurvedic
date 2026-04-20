@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AyurPredict | Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #f4f6f8;
+    --surface: #ffffff;
+    --surface-alt: #f8fafc;
+    --line: #d9e1ea;
+    --text: #1f2937;
+    --muted: #64748b;
+    --primary: #1d4e89;
+    --primary-soft: #e9f1fb;
+    --accent: #0f766e;
+    --accent-soft: #e8f6f4;
+    --danger: #b42318;
+    --danger-soft: #fef3f2;
+    --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  }
+  body {
+    margin: 0;
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+  }
+  .app-shell {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+  }
+  .sidebar {
+    background: #12304f;
+    color: #f8fafc;
+    padding: 28px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .brand {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.7rem;
+    line-height: 1.2;
+  }
+  .brand span { color: #b8d4f4; }
+  .sidebar-copy {
+    color: rgba(248, 250, 252, 0.74);
+    line-height: 1.65;
+    font-size: 0.96rem;
+  }
+  .side-card {
+    padding: 18px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .side-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(248, 250, 252, 0.66);
+  }
+  .side-value {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  .side-nav {
+    display: grid;
+    gap: 10px;
+  }
+  .side-link, .logout-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #f8fafc;
+    text-decoration: none;
+    padding: 12px 14px;
+    font: inherit;
+    cursor: pointer;
+  }
+  .side-link.active {
+    background: rgba(184, 212, 244, 0.14);
+    border-color: rgba(184, 212, 244, 0.24);
+  }
+  .main {
+    padding: 28px;
+  }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .page-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 2rem;
+    margin: 0 0 6px;
+  }
+  .page-subtitle {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .user-badge {
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    font-weight: 600;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+  .summary-card, .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+  }
+  .summary-card {
+    padding: 18px 20px;
+  }
+  .summary-label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--muted);
+    font-size: 0.84rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .summary-value {
+    font-size: 1.9rem;
+    font-weight: 700;
+  }
+  .content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
+    gap: 20px;
+  }
+  .panel {
+    padding: 22px;
+  }
+  .panel-title {
+    margin: 0 0 6px;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  .panel-copy {
+    margin: 0 0 18px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .model-warning, .message {
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .model-warning, .message {
+    background: var(--danger-soft);
+    border: 1px solid #fecdca;
+    color: var(--danger);
+  }
+  .message { display: none; }
+  .toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .search-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface-alt);
+    color: var(--text);
+    font: inherit;
+  }
+  .search-input:focus {
+    outline: none;
+    border-color: #9bbbe0;
+    box-shadow: 0 0 0 4px rgba(29, 78, 137, 0.10);
+  }
+  .actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .ghost-btn, .primary-btn {
+    border-radius: 12px;
+    padding: 12px 16px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .ghost-btn {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text);
+  }
+  .primary-btn {
+    border: 1px solid var(--primary);
+    background: var(--primary);
+    color: #fff;
+  }
+  .ghost-btn:disabled, .primary-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+  .selection-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: var(--surface-alt);
+    border: 1px solid var(--line);
+  }
+  .selection-row strong {
+    font-size: 1rem;
+  }
+  .selection-row span {
+    color: var(--muted);
+  }
+  .symptom-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    max-height: 560px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+  .symptom-option {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+    cursor: pointer;
+  }
+  .symptom-option.checked {
+    border-color: #9bbbe0;
+    background: var(--primary-soft);
+  }
+  .symptom-option input {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--primary);
+  }
+  .symptom-label {
+    line-height: 1.45;
+  }
+  .empty-list, .muted-block {
+    padding: 18px;
+    border-radius: 14px;
+    background: var(--surface-alt);
+    border: 1px solid var(--line);
+    color: var(--muted);
+  }
+  .empty-list { display: none; margin-top: 16px; }
+  .status-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .result-disease {
+    margin: 0 0 8px;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.85rem;
+  }
+  .result-copy, .result-meta {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .metric-box {
+    margin: 18px 0;
+    padding: 16px;
+    border-radius: 14px;
+    background: var(--surface-alt);
+    border: 1px solid var(--line);
+  }
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .bar-track {
+    height: 10px;
+    border-radius: 999px;
+    background: #e5edf5;
+    overflow: hidden;
+  }
+  .bar-fill {
+    width: 0;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #1d4e89 0%, #0f766e 100%);
+    transition: width 0.5s ease;
+  }
+  .selected-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .selected-pill {
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .matches-list {
+    display: grid;
+    gap: 12px;
+  }
+  .match-card {
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--surface-alt);
+  }
+  .match-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .match-disease {
+    font-weight: 700;
+    font-size: 1.02rem;
+  }
+  .match-confidence {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .match-copy {
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .section-block {
+    margin-top: 20px;
+  }
+  .section-heading {
+    margin: 0 0 10px;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .spinner {
+    display: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 3px solid #dbe6f2;
+    border-top-color: var(--primary);
+    animation: spin 0.8s linear infinite;
+  }
+  .spinner.active { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (max-width: 1100px) {
+    .app-shell { grid-template-columns: 1fr; }
+    .sidebar { gap: 18px; }
+    .summary-grid, .content-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
+    .main { padding: 18px; }
+    .toolbar { grid-template-columns: 1fr; }
+    .symptom-grid { grid-template-columns: 1fr; max-height: 420px; }
+    .topbar, .result-header, .selection-row { align-items: flex-start; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div>
+        <div class="brand">Ayur<span>Predict</span></div>
+        <p class="sidebar-copy">Formal disease prediction dashboard for symptom-based analysis and review.</p>
+      </div>
+
+      <div class="side-card">
+        <span class="side-label">Logged in user</span>
+        <div>{{ username }}</div>
+      </div>
+
+      <div class="side-card">
+        <span class="side-label">Available symptoms</span>
+        <div class="side-value">{{ all_symptoms|length }}</div>
+      </div>
+
+      <nav class="side-nav">
+        <a class="side-link active" href="/">Prediction Dashboard</a>
+        <a class="side-link" href="/history">Prediction History</a>
+        <form action="/logout" method="post">
+          <button class="logout-btn" type="submit">Log out</button>
+        </form>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <h1 class="page-title">Prediction Dashboard</h1>
+          <p class="page-subtitle">Select symptoms, submit the case, and review ranked disease matches with confidence.</p>
+        </div>
+        <div class="user-badge">{{ username }}</div>
+      </div>
+
+      <section class="summary-grid">
+        <div class="summary-card">
+          <span class="summary-label">System mode</span>
+          <div class="summary-value">Active</div>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Input method</span>
+          <div class="summary-value">Checkbox</div>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Result mode</span>
+          <div class="summary-value">Ranked list</div>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <div class="panel">
+          <h2 class="panel-title">Symptom Selection</h2>
+          <p class="panel-copy">Search the symptom library, mark all symptoms that apply, and submit for analysis.</p>
+
+          {% if model_error %}
+          <div class="model-warning">{{ model_error }}</div>
+          {% endif %}
+
+          {% if all_symptoms %}
+          <div class="toolbar">
+            <input class="search-input" id="symptom-search" type="text" placeholder="Search symptoms">
+            <div class="actions">
+              <button class="ghost-btn" type="button" id="select-visible-btn">Select visible</button>
+              <button class="ghost-btn" type="button" id="clear-btn">Clear all</button>
+              <button class="primary-btn" type="button" id="predict-btn">Run prediction</button>
+            </div>
+          </div>
+
+          <div class="selection-row">
+            <strong><span id="selected-count">0</span> symptoms selected</strong>
+            <span>Only the selected symptoms are sent to the backend for prediction.</span>
+          </div>
+
+          <form id="predict-form">
+            <div class="symptom-grid" id="symptom-grid">
+              {% for symptom in all_symptoms %}
+              <label class="symptom-option" data-symptom="{{ symptom|lower }}">
+                <input type="checkbox" name="symptoms" value="{{ symptom }}">
+                <span class="symptom-label">{{ symptom }}</span>
+              </label>
+              {% endfor %}
+            </div>
+          </form>
+
+          <div class="empty-list" id="empty-list">No symptoms match the current search.</div>
+          {% else %}
+          <div class="muted-block">The symptom list could not be loaded because the model is not ready.</div>
+          {% endif %}
+        </div>
+
+        <aside class="panel">
+          <div class="result-header">
+            <div>
+              <h2 class="panel-title" style="margin-bottom: 4px;">Prediction Results</h2>
+              <p class="panel-copy" style="margin: 0;">Review the top disease and all matching disease options.</p>
+            </div>
+            <div class="status-chip">Ready</div>
+          </div>
+
+          <div class="spinner" id="spinner"></div>
+          <div class="message" id="error-box"></div>
+
+          <h3 class="result-disease" id="result-disease">No prediction yet</h3>
+          <p class="result-copy" id="result-copy">Submit a symptom set to generate a professional prediction summary.</p>
+
+          <div class="metric-box">
+            <div class="metric-row">
+              <span>Top confidence</span>
+              <span id="confidence-text">0%</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" id="confidence-bar"></div>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <h4 class="section-heading">Selected Symptoms</h4>
+            <div class="selected-list" id="selected-symptoms">
+              <span class="selected-pill">No symptoms selected</span>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <h4 class="section-heading">Matching Diseases</h4>
+            <div class="matches-list" id="matches-list">
+              <div class="match-card">
+                <div class="match-copy">Ranked disease matches will appear here after prediction.</div>
+              </div>
+            </div>
+          </div>
+
+          <p class="result-meta" id="result-meta" style="margin-top: 18px;">Predictions are stored in your account history after each successful run.</p>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+<script>
+  const searchInput = document.getElementById('symptom-search');
+  const selectedCount = document.getElementById('selected-count');
+  const predictButton = document.getElementById('predict-btn');
+  const selectVisibleButton = document.getElementById('select-visible-btn');
+  const clearButton = document.getElementById('clear-btn');
+  const resultDisease = document.getElementById('result-disease');
+  const resultCopy = document.getElementById('result-copy');
+  const resultMeta = document.getElementById('result-meta');
+  const selectedSymptomsBox = document.getElementById('selected-symptoms');
+  const confidenceText = document.getElementById('confidence-text');
+  const confidenceBar = document.getElementById('confidence-bar');
+  const errorBox = document.getElementById('error-box');
+  const spinner = document.getElementById('spinner');
+  const emptyList = document.getElementById('empty-list');
+  const matchesList = document.getElementById('matches-list');
+  const options = Array.from(document.querySelectorAll('.symptom-option'));
+
+  function getCheckedInputs() {
+    return Array.from(document.querySelectorAll('input[name="symptoms"]:checked'));
+  }
+
+  function renderSelectedSymptoms() {
+    const values = getCheckedInputs().map((input) => input.value);
+    selectedCount.textContent = values.length;
+    selectedSymptomsBox.innerHTML = '';
+
+    if (!values.length) {
+      selectedSymptomsBox.innerHTML = '<span class="selected-pill">No symptoms selected</span>';
+      return;
+    }
+
+    values.forEach((value) => {
+      const pill = document.createElement('span');
+      pill.className = 'selected-pill';
+      pill.textContent = value;
+      selectedSymptomsBox.appendChild(pill);
+    });
+  }
+
+  function refreshCheckedStyles() {
+    options.forEach((option) => {
+      const checkbox = option.querySelector('input');
+      option.classList.toggle('checked', checkbox.checked);
+    });
+    renderSelectedSymptoms();
+  }
+
+  function filterSymptoms() {
+    const query = searchInput.value.trim().toLowerCase();
+    let visibleCount = 0;
+
+    options.forEach((option) => {
+      const isVisible = option.dataset.symptom.includes(query);
+      option.style.display = isVisible ? 'flex' : 'none';
+      if (isVisible) visibleCount += 1;
+    });
+
+    emptyList.style.display = visibleCount ? 'none' : 'block';
+  }
+
+  function setLoading(isLoading) {
+    predictButton.disabled = isLoading;
+    selectVisibleButton.disabled = isLoading;
+    clearButton.disabled = isLoading;
+    spinner.classList.toggle('active', isLoading);
+    errorBox.style.display = 'none';
+  }
+
+  function showError(message) {
+    errorBox.textContent = message;
+    errorBox.style.display = 'block';
+  }
+
+  function renderMatches(matches) {
+    matchesList.innerHTML = '';
+    matches.forEach((match) => {
+      const card = document.createElement('div');
+      card.className = 'match-card';
+      card.innerHTML = `
+        <div class="match-head">
+          <div class="match-disease">${match.disease}</div>
+          <div class="match-confidence">${match.confidence}</div>
+        </div>
+        <div class="match-copy">Matched symptoms: ${match.matched_symptoms.join(', ') || 'None'}.</div>
+      `;
+      matchesList.appendChild(card);
+    });
+  }
+
+  async function runPrediction() {
+    const checked = getCheckedInputs();
+    if (!checked.length) {
+      showError('Select at least one symptom before running prediction.');
+      return;
+    }
+
+    setLoading(true);
+    confidenceBar.style.width = '0%';
+
+    const formData = new FormData();
+    checked.forEach((input) => formData.append('symptoms', input.value));
+
+    try {
+      const response = await fetch('/predict', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+
+      if (!response.ok || data.error) {
+        showError(data.error || 'Prediction failed.');
+        return;
+      }
+
+      resultDisease.textContent = data.disease;
+      resultCopy.textContent = `Found ${data.matches.length} matching disease${data.matches.length === 1 ? '' : 's'} from ${data.selected_symptoms.length} selected symptoms.`;
+      resultMeta.textContent = `Top result saved at ${data.timestamp}.`;
+      confidenceText.textContent = data.confidence;
+      confidenceBar.style.width = `${data.confidence_raw}%`;
+      renderMatches(data.matches);
+
+      selectedSymptomsBox.innerHTML = '';
+      data.selected_symptoms.forEach((symptom) => {
+        const pill = document.createElement('span');
+        pill.className = 'selected-pill';
+        pill.textContent = symptom;
+        selectedSymptomsBox.appendChild(pill);
+      });
+    } catch (error) {
+      showError('Network error while contacting the Flask app.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  options.forEach((option) => {
+    option.querySelector('input').addEventListener('change', refreshCheckedStyles);
+  });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', filterSymptoms);
+  }
+
+  if (selectVisibleButton) {
+    selectVisibleButton.addEventListener('click', () => {
+      options.forEach((option) => {
+        if (option.style.display === 'none') return;
+        option.querySelector('input').checked = true;
+      });
+      refreshCheckedStyles();
+    });
+  }
+
+  if (clearButton) {
+    clearButton.addEventListener('click', () => {
+      options.forEach((option) => {
+        option.querySelector('input').checked = false;
+      });
+      refreshCheckedStyles();
+      errorBox.style.display = 'none';
+    });
+  }
+
+  if (predictButton) {
+    predictButton.addEventListener('click', runPrediction);
+  }
+
+  refreshCheckedStyles();
+  filterSymptoms();
+</script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AyurPredict | History</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #f4f6f8;
+    --surface: #ffffff;
+    --surface-alt: #f8fafc;
+    --line: #d9e1ea;
+    --text: #1f2937;
+    --muted: #64748b;
+    --primary: #1d4e89;
+    --success: #0f766e;
+    --warning: #b54708;
+    --danger: #b42318;
+    --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  }
+  body {
+    margin: 0;
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+  }
+  .shell {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px;
+  }
+  .topbar, .hero, .table-panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+  }
+  .topbar {
+    padding: 18px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .brand {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.6rem;
+  }
+  .brand span { color: var(--primary); }
+  .actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .user-badge, .link-btn, .logout-btn {
+    border-radius: 12px;
+    padding: 10px 14px;
+    font: inherit;
+  }
+  .user-badge {
+    border: 1px solid var(--line);
+    background: var(--surface-alt);
+    font-weight: 600;
+  }
+  .link-btn, .logout-btn {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .hero {
+    padding: 24px;
+    margin-bottom: 22px;
+  }
+  .hero h1 {
+    margin: 0 0 8px;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 2rem;
+  }
+  .hero p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .table-panel {
+    overflow: hidden;
+  }
+  .table-wrap {
+    overflow: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 16px 18px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--line);
+  }
+  th {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  td {
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+  tr:last-child td { border-bottom: none; }
+  .disease {
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .symptoms {
+    max-width: 360px;
+    color: var(--muted);
+  }
+  .timestamp {
+    white-space: nowrap;
+    color: var(--muted);
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+  .high { background: #e8f6f4; color: var(--success); }
+  .medium { background: #fff4e5; color: var(--warning); }
+  .low { background: #fef3f2; color: var(--danger); }
+  .empty {
+    padding: 30px 24px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  @media (max-width: 760px) {
+    .shell { padding: 18px; }
+    .topbar { align-items: flex-start; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">Ayur<span>Predict</span></div>
+      <div class="actions">
+        <div class="user-badge">{{ username }}</div>
+        <a class="link-btn" href="/">Dashboard</a>
+        <form action="/logout" method="post">
+          <button class="logout-btn" type="submit">Log out</button>
+        </form>
+      </div>
+    </div>
+
+    <section class="hero">
+      <h1>Prediction History</h1>
+      <p>Review previous predictions, selected symptoms, confidence values, and the recorded timestamp for each result.</p>
+    </section>
+
+    <section class="table-panel">
+      {% if records %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Symptoms</th>
+              <th>Predicted Disease</th>
+              <th>Confidence</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in records %}
+            {% set pct = (r.confidence * 100) | round(1) %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td class="symptoms">{{ r.symptoms }}</td>
+              <td class="disease">{{ r.disease }}</td>
+              <td>
+                {% if pct >= 75 %}
+                <span class="badge high">{{ pct }}%</span>
+                {% elif pct >= 50 %}
+                <span class="badge medium">{{ pct }}%</span>
+                {% else %}
+                <span class="badge low">{{ pct }}%</span>
+                {% endif %}
+              </td>
+              <td class="timestamp">{{ r.timestamp }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty">No prediction history is available yet. Go back to the dashboard and run a prediction to populate this page.</div>
+      {% endif %}
+    </section>
+  </div>
+</body>
+</html>

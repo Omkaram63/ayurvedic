@@ -1,0 +1,8 @@
+flask>=3.0.0
+flask-session>=0.6.0
+torch>=2.1.0
+torch-geometric>=2.4.0
+networkx>=3.2
+numpy>=1.26
+matplotlib>=3.8
+scikit-learn>=1.4

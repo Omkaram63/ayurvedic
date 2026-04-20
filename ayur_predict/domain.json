@@ -1,0 +1,247 @@
+{
+  "domain": "Ayurveda – Nidanasthana",
+  "source_text": "Ashtanga Hridayam",
+
+  "diseases": {
+
+    "Vidradhi": {
+      "description": "Abscess arising due to dosha vitiation affecting skin, muscle, blood and deeper tissues",
+      "types": {
+
+        "Vataja Vidradhi": {
+          "dosha": "Vata",
+          "symptoms": [
+            "Severe pain",
+            "Pricking pain",
+            "Cutting pain",
+            "Throbbing pain",
+            "Irregular swelling",
+            "Blackish-red discoloration",
+            "Hard swelling",
+            "Slow growth",
+            "Delayed suppuration",
+            "Spreading pain to nearby areas",
+            "Flatulence",
+            "Sound production inside swelling"
+          ]
+        },
+
+        "Pittaja Vidradhi": {
+          "dosha": "Pitta",
+          "symptoms": [
+            "Burning sensation",
+            "Fever",
+            "Thirst",
+            "Delusion",
+            "Red coloration",
+            "Coppery discoloration",
+            "Black discoloration",
+            "Rapid growth",
+            "Quick suppuration",
+            "Severe inflammation",
+            "Heat at the site"
+          ]
+        },
+
+        "Kaphaja Vidradhi": {
+          "dosha": "Kapha",
+          "symptoms": [
+            "Heaviness",
+            "Cold sensation",
+            "Itching",
+            "Stiffness",
+            "Hard swelling",
+            "Slow growth",
+            "Delayed suppuration",
+            "Nausea",
+            "Excessive sleep",
+            "Loss of taste",
+            "Feeling of heaviness in body"
+          ]
+        },
+
+        "Raktaja Vidradhi": {
+          "dosha": "Rakta",
+          "symptoms": [
+            "Blue discoloration",
+            "Black eruptions around swelling",
+            "Severe burning sensation",
+            "Severe pain",
+            "Fever",
+            "Pitta-like symptoms",
+            "External manifestation",
+            "Internal occurrence in uterus (women)"
+          ]
+        },
+
+        "Sannipataja Vidradhi": {
+          "dosha": "Vata-Pitta-Kapha",
+          "symptoms": [
+            "Combination of all dosha symptoms",
+            "Severe pain",
+            "Burning sensation",
+            "Heaviness",
+            "Rapid suppuration",
+            "Severe inflammation",
+            "Deep seated swelling",
+            "Poor prognosis"
+          ]
+        }
+      }
+    },
+
+    "Gulma": {
+      "description": "Palpable abdominal mass caused by aggravated doshas obstructing alimentary tract",
+      "types": {
+
+        "Vataja Gulma": {
+          "dosha": "Vata",
+          "symptoms": [
+            "Severe abdominal pain",
+            "Pricking pain",
+            "Cutting pain",
+            "Flatulence",
+            "Constipation",
+            "Gurgling sounds in abdomen",
+            "Dryness of mouth",
+            "Black discoloration of skin",
+            "Irregular shape of mass",
+            "Changing size of mass",
+            "Pain radiating to flanks",
+            "Pain in waist and back"
+          ]
+        },
+
+        "Pittaja Gulma": {
+          "dosha": "Pitta",
+          "symptoms": [
+            "Burning sensation",
+            "Fever",
+            "Thirst",
+            "Sweating",
+            "Diarrhoea",
+            "Yellow discoloration of skin",
+            "Redness",
+            "Tenderness on touch",
+            "Heat at the site",
+            "Rapid progression"
+          ]
+        },
+
+        "Kaphaja Gulma": {
+          "dosha": "Kapha",
+          "symptoms": [
+            "Heaviness",
+            "Loss of appetite",
+            "Nausea",
+            "Cold sensation",
+            "Weakness",
+            "Hard mass",
+            "Deep seated tumor",
+            "Slow growth",
+            "Minimal pain",
+            "Static nature of mass"
+          ]
+        },
+
+        "Raktaja Gulma": {
+          "dosha": "Rakta",
+          "symptoms": [
+            "Occurs only in women",
+            "Symptoms resembling pregnancy",
+            "Nausea",
+            "Breast milk secretion",
+            "Abdominal pain",
+            "Burning sensation",
+            "Fever",
+            "Diarrhoea",
+            "Foul smelling discharge",
+            "Uterine pain"
+          ]
+        },
+
+        "Sannipataja Gulma": {
+          "dosha": "Vata-Pitta-Kapha",
+          "symptoms": [
+            "Severe pain",
+            "Burning sensation",
+            "Rapid suppuration",
+            "Hard mass",
+            "Great elevation",
+            "Combination of all dosha symptoms",
+            "Incurable nature"
+          ]
+        }
+      }
+    },
+
+    "Udara": {
+      "description": "Enlargement of abdomen due to obstruction of channels and accumulation of fluid",
+      "types": {
+
+        "Vataja Udara": {
+          "dosha": "Vata",
+          "symptoms": [
+            "Abdominal enlargement",
+            "Pain in abdomen",
+            "Pain in flanks",
+            "Pain in waist and back",
+            "Flatulence",
+            "Constipation",
+            "Blackish discoloration",
+            "Variable abdominal size",
+            "Sound on tapping abdomen",
+            "Movement of gas inside abdomen"
+          ]
+        },
+
+        "Pittaja Udara": {
+          "dosha": "Pitta",
+          "symptoms": [
+            "Fever",
+            "Burning sensation",
+            "Thirst",
+            "Yellow discoloration",
+            "Red or coppery veins on abdomen",
+            "Sweating",
+            "Soft abdomen",
+            "Rapid fluid accumulation",
+            "Heat sensation"
+          ]
+        },
+
+        "Kaphaja Udara": {
+          "dosha": "Kapha",
+          "symptoms": [
+            "Heaviness",
+            "Loss of appetite",
+            "Weakness",
+            "Cold sensation",
+            "Nausea",
+            "Dyspnoea",
+            "White discoloration",
+            "Slow enlargement",
+            "Hard abdomen",
+            "Static abdomen"
+          ]
+        },
+
+        "Jalodara": {
+          "dosha": "Vata-Kapha",
+          "symptoms": [
+            "Massive abdominal enlargement",
+            "Fluid accumulation",
+            "Bulging umbilicus",
+            "Veins visible on abdomen",
+            "Soft abdomen",
+            "Sound of water movement",
+            "Dyspnoea",
+            "Cough",
+            "Loss of appetite",
+            "Thirst"
+          ]
+        }
+      }
+    }
+  }
+}
