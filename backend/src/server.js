@@ -13,7 +13,7 @@ const SESSION_SECRET = process.env.SESSION_SECRET || "ayur-predict-secret";
 
 app.use(
   cors({
-    origin: FRONTEND_URL,
+    origin: process.env.FRONTEND_URL || true,
     credentials: true,
   }),
 );
