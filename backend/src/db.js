@@ -6,10 +6,13 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const dataDir = path.join(__dirname, "..", "data");
+const databasePath = process.env.DATABASE_PATH || (process.env.VERCEL ? path.join("/tmp", "database.db") : path.join(dataDir, "database.db"));
 
-fs.mkdirSync(dataDir, { recursive: true });
+if (!process.env.DATABASE_PATH && !process.env.VERCEL) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
 
-const db = new Database(path.join(dataDir, "database.db"));
+const db = new Database(databasePath);
 
 db.pragma("journal_mode = WAL");
 
