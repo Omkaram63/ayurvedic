@@ -163,6 +163,10 @@ app.get("/api/history", requireAuth, (req, res) => {
   res.json({ records });
 });
 
-app.listen(PORT, () => {
-  console.log(`AyurPredict backend running on http://localhost:${PORT}`);
-});
+export default app;
+
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`AyurPredict backend running on http://localhost:${PORT}`);
+  });
+}
